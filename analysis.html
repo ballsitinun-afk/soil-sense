@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Analysis - SoilSense</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body class="analysis-page">
+
+    <nav class="navbar internal">
+        <div class="logo">
+            <span>SoilSense<span>.com</span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" class="btn-contact">Back to Dashboard</a></li>
+        </ul>
+    </nav>
+
+    <section class="container">
+        <div class="form-wrapper">
+            <h2>วิเคราะห์ดินเพื่อการปลูกพืชหมุนเวียน</h2>
+            <p>กรอกข้อมูลลักษณะดินของคุณ เพื่อค้นหาพืชที่เหมาะสมและลดการปลูกพืชเชิงเดี่ยว</p>
+
+            <form id="soilForm">
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>ลักษณะดิน (Texture)</label>
+                        <select id="texture" required>
+                            <option value="">เลือกพื้นผิวสัมผัส</option>
+                            <option value="sandy">ดินทราย (หยาบ)</option>
+                            <option value="loamy">ดินร่วน (สมบูรณ์)</option>
+                            <option value="clay">ดินเหนียว (ละเอียด)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>สีของดิน (Soil Color)</label>
+                        <select id="color" required>
+                            <option value="">เลือกสีของดิน</option>
+                            <option value="dark">สีดำ/น้ำตาลเข้ม (อินทรียวัตถุสูง)</option>
+                            <option value="red">สีแดง/ส้ม (ธาตุเหล็กสูง)</option>
+                            <option value="pale">สีขาว/เทาอ่อน (ระบายน้ำไม่ดี)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>ลักษณะภูมิประเทศ</label>
+                        <select id="terrain" required>
+                            <option value="">เลือกสภาพพื้นที่</option>
+                            <option value="flat">ที่ราบลุ่ม</option>
+                            <option value="slope">ที่ลาดชัน/เชิงเขา</option>
+                            <option value="highland">ที่ราบสูง</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>ชนิดของดิน (Soil Type)</label>
+                        <input type="text" placeholder="เช่น ดินเค็ม, ดินเปรี้ยว, ดินร่วนปนทราย" id="soilType">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">ค้นหาพืชที่เหมาะสม</button>
+            </form>
+        </div>
+
+        <div id="resultSection" class="result-section" style="display: none;">
+            <hr>
+            <h3>พืชที่แนะนำสำหรับพื้นที่ของคุณ</h3>
+            <div class="plant-grid">
+                </div>
+        </div>
+    </section>
+
+    <script>
+        // ระบบจำลองการค้นหาพืช
+        document.getElementById('soilForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const resultSection = document.getElementById('resultSection');
+            const plantGrid = document.querySelector('.plant-grid');
+            
+            // แสดงส่วนผลลัพธ์
+            resultSection.style.display = 'block';
+            
+            // จำลองข้อมูลผลลัพธ์ (ในอนาคตใช้เชื่อมต่อ Database ได้)
+            const recommendations = [
+                { name: "ถั่วเขียว", desc: "ช่วยเพิ่มไนโตรเจนในดิน ลดการใช้ปุ๋ยเคมี", tag: "บำรุงดิน" },
+                { name: "ข้าวโพดหวาน", desc: "เติบโตดีในดินร่วน ระบายน้ำได้ดี", tag: "พืชเศรษฐกิจ" },
+                { name: "มันสำปะหลัง", desc: "ทนทานต่อสภาพแห้งแล้งได้ดี", tag: "ทนแล้ง" }
+            ];
+
+            plantGrid.innerHTML = recommendations.map(plant => `
+                <div class="plant-card">
+                    <div class="plant-tag">${plant.tag}</div>
+                    <h4>${plant.name}</h4>
+                    <p>${plant.desc}</p>
+                </div>
+            `).join('');
+
+            window.scrollTo({ top: resultSection.offsetTop, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
