@@ -1,106 +1,177 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soil Analysis - SoilSense</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>วิเคราะห์ดิน - SoilSense</title>
+
+<style>
+/* ---------- RESET ---------- */
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",sans-serif}
+
+/* ---------- LAYOUT ---------- */
+body{background:#f5f7f2;color:#333}
+.navbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 18px;background:#3d4a1e;color:#fff
+}
+.logo span span{color:#cfe39a}
+.btn-back{color:#fff;text-decoration:none;border:1px solid #fff;padding:6px 12px;border-radius:6px}
+
+.container{max-width:1100px;margin:auto;padding:20px}
+
+/* ---------- FORM ---------- */
+.form-wrapper{
+  background:#fff;padding:20px;border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08)
+}
+.form-wrapper h2{color:#3d4a1e;margin-bottom:8px}
+.input-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:20px 0
+}
+.input-group label{font-weight:600}
+.input-group select{
+  width:100%;padding:8px;border-radius:6px;border:1px solid #ccc
+}
+.btn-submit{
+  background:#3d4a1e;color:#fff;border:none;
+  padding:12px 20px;border-radius:8px;cursor:pointer
+}
+.btn-submit:hover{opacity:.9}
+
+/* ---------- RESULT ---------- */
+.result-section{margin-top:30px}
+.plant-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:18px;margin-top:15px
+}
+.plant-card{
+  background:#fff;border-radius:12px;overflow:hidden;
+  box-shadow:0 3px 8px rgba(0,0,0,.1);text-align:center
+}
+.plant-card img{
+  width:100%;height:140px;object-fit:cover
+}
+.plant-card h4{margin:10px 0;color:#3d4a1e}
+.plant-card p{font-size:14px;padding:0 10px 12px}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:768px){
+  .input-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
-<body class="analysis-page">
 
-    <nav class="navbar internal">
-        <div class="logo">
-            <span>SoilSense<span>.com</span></span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#" class="btn-contact">Back to Dashboard</a></li>
-        </ul>
-    </nav>
+<body>
 
-    <section class="container">
-        <div class="form-wrapper">
-            <h2>วิเคราะห์ดินเพื่อการปลูกพืชหมุนเวียน</h2>
-            <p>กรอกข้อมูลลักษณะดินของคุณ เพื่อค้นหาพืชที่เหมาะสมและลดการปลูกพืชเชิงเดี่ยว</p>
+<nav class="navbar">
+  <div class="logo"><span>SoilSense<span>.com</span></span></div>
+  <a href="index.html" class="btn-back">กลับหน้าหลัก</a>
+</nav>
 
-            <form id="soilForm">
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label>ลักษณะดิน (Texture)</label>
-                        <select id="texture" required>
-                            <option value="">เลือกพื้นผิวสัมผัส</option>
-                            <option value="sandy">ดินทราย (หยาบ)</option>
-                            <option value="loamy">ดินร่วน (สมบูรณ์)</option>
-                            <option value="clay">ดินเหนียว (ละเอียด)</option>
-                        </select>
-                    </div>
+<section class="container">
+  <div class="form-wrapper">
+    <h2>สำรวจลักษณะดินของคุณ</h2>
+    <p>เลือกข้อมูลดินเพื่อแนะนำพืชและผลไม้ที่เหมาะสม</p>
 
-                    <div class="input-group">
-                        <label>สีของดิน (Soil Color)</label>
-                        <select id="color" required>
-                            <option value="">เลือกสีของดิน</option>
-                            <option value="dark">สีดำ/น้ำตาลเข้ม (อินทรียวัตถุสูง)</option>
-                            <option value="red">สีแดง/ส้ม (ธาตุเหล็กสูง)</option>
-                            <option value="pale">สีขาว/เทาอ่อน (ระบายน้ำไม่ดี)</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label>ลักษณะภูมิประเทศ</label>
-                        <select id="terrain" required>
-                            <option value="">เลือกสภาพพื้นที่</option>
-                            <option value="flat">ที่ราบลุ่ม</option>
-                            <option value="slope">ที่ลาดชัน/เชิงเขา</option>
-                            <option value="highland">ที่ราบสูง</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label>ชนิดของดิน (Soil Type)</label>
-                        <input type="text" placeholder="เช่น ดินเค็ม, ดินเปรี้ยว, ดินร่วนปนทราย" id="soilType">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-submit">ค้นหาพืชที่เหมาะสม</button>
-            </form>
+    <form id="soilForm">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>ลักษณะเนื้อดิน</label>
+          <select id="texture">
+            <option value="sandy">ดินทราย</option>
+            <option value="loamy">ดินร่วน</option>
+            <option value="clay">ดินเหนียว</option>
+          </select>
         </div>
 
-        <div id="resultSection" class="result-section" style="display: none;">
-            <hr>
-            <h3>พืชที่แนะนำสำหรับพื้นที่ของคุณ</h3>
-            <div class="plant-grid">
-                </div>
+        <div class="input-group">
+          <label>สีดิน</label>
+          <select id="color">
+            <option value="dark">สีดำ / น้ำตาลเข้ม</option>
+            <option value="red">สีแดง / เหลือง</option>
+            <option value="pale">สีขาว / เทา</option>
+          </select>
         </div>
-    </section>
 
-    <script>
-        // ระบบจำลองการค้นหาพืช
-        document.getElementById('soilForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const resultSection = document.getElementById('resultSection');
-            const plantGrid = document.querySelector('.plant-grid');
-            
-            // แสดงส่วนผลลัพธ์
-            resultSection.style.display = 'block';
-            
-            // จำลองข้อมูลผลลัพธ์ (ในอนาคตใช้เชื่อมต่อ Database ได้)
-            const recommendations = [
-                { name: "ถั่วเขียว", desc: "ช่วยเพิ่มไนโตรเจนในดิน ลดการใช้ปุ๋ยเคมี", tag: "บำรุงดิน" },
-                { name: "ข้าวโพดหวาน", desc: "เติบโตดีในดินร่วน ระบายน้ำได้ดี", tag: "พืชเศรษฐกิจ" },
-                { name: "มันสำปะหลัง", desc: "ทนทานต่อสภาพแห้งแล้งได้ดี", tag: "ทนแล้ง" }
-            ];
+        <div class="input-group">
+          <label>ภูมิประเทศ</label>
+          <select id="terrain">
+            <option value="flat">ที่ราบลุ่ม</option>
+            <option value="highland">ที่ดอน / ที่สูง</option>
+            <option value="slope">พื้นที่ลาดชัน</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-submit">วิเคราะห์ดิน</button>
+    </form>
+  </div>
+  <div id="resultSection" class="result-section" style="display:none">
+    <h3>พืชและผลไม้ที่เหมาะสม</h3>
+    <div class="plant-grid"></div>
+  </div>
+</section>
 
-            plantGrid.innerHTML = recommendations.map(plant => `
-                <div class="plant-card">
-                    <div class="plant-tag">${plant.tag}</div>
-                    <h4>${plant.name}</h4>
-                    <p>${plant.desc}</p>
-                </div>
-            `).join('');
+   <script>
+        const plantDatabase = [
+            /* -------------------- ผัก -------------------- */
+            { name: "มะเขือเทศ", textures: ["loamy","sandy"], colors: ["dark","red"], terrains: ["flat","highland"], img: "tomato.jpg", desc: "ผักผลโตปลูกง่าย เหมาะกับดินโปร่งระบายน้ำดี" },
+            { name: "แครอท", textures: ["loamy","sandy"], colors: ["dark","pale"], terrains: ["flat","highland"], img: "carrot.jpg", desc: "ผักรากที่โตได้ดีในดินร่วนหรือทราย" },
+            { name: "ผักกาดหอม", textures: ["loamy"], colors: ["dark","pale"], terrains: ["flat"], img: "lettuce.jpg", desc: "ผักใบสำหรับสลัด เหมาะพื้นที่ราบลุ่ม" },
+            { name: "แตงกวา", textures: ["loamy"], colors: ["dark","pale"], terrains: ["flat"], img: "cucumber.jpg", desc: "ผักน้ำเยอะ โตได้ในดินร่วน" },
+            { name: "บรอกโคลี", textures: ["loamy","clay"], colors: ["dark","red"], terrains: ["flat","slope"], img: "broccoli.jpg", desc: "ผักดอกที่โตได้ดีในพื้นที่หลายระดับ" },
+            { name: "ถั่วลิสง", textures: ["sandy","loamy"], colors: ["pale","dark"], terrains: ["flat","highland"], img: "peanut.jpg", desc: "พืชคลุมดิน ช่วยเพิ่มไนโตรเจน" },
+            { name: "หัวหอม", textures: ["loamy","sandy"], colors: ["dark","red"], terrains: ["flat","highland"], img: "onion.jpg", desc: "ผักหัวที่ใช้ทั่วไปในอาหารไทย" },
+            { name: "ผักขม", textures: ["loamy","clay"], colors: ["dark"], terrains: ["flat","slope"], img: "spinach.jpg", desc: "ผักใบอุดมธาตุอาหาร" },
+            { name: "ผักคะน้า", textures: ["loamy","clay"], colors: ["dark","red"], terrains: ["flat","highland"], img: "kale.jpg", desc: "ผักใบเขียวที่ปลูกง่าย" },
+            { name: "หัวไชเท้า", textures: ["loamy","sandy"], colors: ["dark","pale"], terrains: ["flat","highland"], img: "radish.jpg", desc: "ผักรากเร็วโต" },
+            { name: "ฟักทอง", textures: ["loamy","clay"], colors: ["dark","pale"], terrains: ["flat","highland"], img: "pumpkin.jpg", desc: "ผลใหญ่ ใช้ทำอาหารหลากหลาย" },
+            { name: "ถั่วฝักยาว", textures: ["loamy"], colors: ["dark","pale"], terrains: ["flat","highland"], img: "longbean.jpg", desc: "ผักฝักโปรตีนสูง โตได้เร็ว" },
+            { name: "ข้าวโพดหวาน", textures: ["loamy"], colors: ["dark","red"], terrains: ["flat","highland"], img: "sweetcorn.jpg", desc: "พืชผลไร่ที่ชอบแสงแดด" },
 
-            window.scrollTo({ top: resultSection.offsetTop, behavior: 'smooth' });
-        });
-    </script>
+            /* -------------------- ผลไม้ -------------------- */
+            { name: "สตรอเบอร์รี่", textures: ["loamy"], colors: ["dark","pale"], terrains: ["highland"], img: "strawberry.jpg", desc: "ผลไม้หวาน เหมาะพื้นที่สูง" },
+            { name: "บลูเบอร์รี่", textures: ["sandy","loamy"], colors: ["pale","dark"], terrains: ["highland"], img: "blueberry.jpg", desc: "ผลไม้เล็กชอบดินโปร่งและพื้นที่สูง" },
+            { name: "แอปเปิล", textures: ["loamy","sandy"], colors: ["dark","red"], terrains: ["highland","slope"], img: "apple.jpg", desc: "ไม้ผลยอดนิยม ปลูกบนที่สูง" },
+            { name: "องุ่น", textures: ["loamy","sandy"], colors: ["dark","red"], terrains: ["flat","highland"], img: "grape.jpg", desc: "ผลไม้ไร่ที่ต้องการแดดจัด" },
+            { name: "ส้ม", textures: ["loamy"], colors: ["dark","red"], terrains: ["flat","highland"], img: "orange.jpg", desc: "ผลไม้รสเปรี้ยวหวาน เหมาะดินระบายน้ำดี" },
+            { name: "มะนาว", textures: ["loamy"], colors: ["dark","red"], terrains: ["flat","highland"], img: "lime.jpg", desc: "ผลไม้ฉ่ำน้ำ ใช้ทำเครื่องดื่มและอาหารหลายเมนู" },
+            { name: "มะม่วง", textures: ["sandy","loamy"], colors: ["dark","red","pale"], terrains: ["flat","highland"], img: "mango.jpg", desc: "ผลไม้เมืองร้อน ปลูกง่ายในหลายพื้นที่" },
+            { name: "กล้วย", textures: ["loamy","clay"], colors: ["dark"], terrains: ["flat","slope"], img: "banana.jpg", desc: "ผลไม้พื้นบ้านที่ชอบความชื้น" },
+            { name: "ฝรั่ง", textures: ["loamy","clay"], colors: ["dark","pale"], terrains: ["flat"], img: "guava.jpg", desc: "ผลไม้พื้นบ้านโตได้หลายสภาพ" },
+            { name: "แตงโม", textures: ["sandy","loamy"], colors: ["pale","dark"], terrains: ["flat","highland"], img: "watermelon.jpg", desc: "ผลไม้ฉ่ำหวาน ปลูกได้ง่าย" },
+
+            /* -------------------- ผลไม้ไทยเขตร้อน -------------------- */
+            { name: "เงาะ", textures: ["loamy","clay"], colors: ["dark","red"], terrains: ["flat","highland"], img: "rambutan.jpg", desc: "ผลไม้ไทยหวานฉ่ำ เหมาะพื้นที่ชื้น" },
+            { name: "ลำไย", textures: ["loamy","clay"], colors: ["dark"], terrains: ["flat","highland"], img: "longan.jpg", desc: "ผลไม้ไทยที่ปลูกแพร่หลาย" },
+            { name: "ลองกอง", textures: ["loamy","sandy"], colors: ["dark","pale"], terrains: ["flat","highland"], img: "langsat.jpg", desc: "ผลไม้เขตร้อนที่โตได้หลายสภาพ" },
+            { name: "ทุเรียน", textures: ["loamy","clay"], colors: ["dark","red"], terrains: ["flat","highland"], img: "durian.jpg", desc: "ราชาแห่งผลไม้ไทย ต้องการดินระบายน้ำดี" },
+            { name: "มังคุด", textures: ["loamy","clay"], colors: ["dark"], terrains: ["flat","highland"], img: "mangosteen.jpg", desc: "ผลไม้ไทยเนื้อหวาน หลากฤดูกาล" },
+            { name: "ปาล์ม (มะพร้าว)", textures: ["sandy","loamy"], colors: ["dark","pale"], terrains: ["flat","highland"], img: "coconut.jpg", desc: "พืชเศรษฐกิจ โตในดินทรายหรือร่วนได้ดี" }
+        ];
+
+document.getElementById("soilForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const t=document.getElementById("texture").value;
+  const c=document.getElementById("color").value;
+  const g=document.getElementById("terrain").value;
+
+  const result=plantDatabase.filter(p=>
+    p.textures.includes(t)&&p.colors.includes(c)&&p.terrains.includes(g)
+  );
+
+  const grid=document.querySelector(".plant-grid");
+  document.getElementById("resultSection").style.display="block";
+
+  grid.innerHTML=result.length?result.map(p=>`
+    <div class="plant-card">
+      <img src="${p.img}">
+      <h4>${p.name}</h4>
+      <p>${p.desc}</p>
+    </div>`).join("")
+  :"<p>ไม่พบพืชที่เหมาะสม</p>";
+});
+</script>
+
 </body>
 </html>

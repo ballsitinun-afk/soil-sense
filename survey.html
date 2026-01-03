@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สรุปความพึงพอใจ & ความคิดเห็น</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { font-family: "Kanit", sans-serif; background:#fafafa; padding:20px; }
+.container { max-width:1200px; margin:auto; }
+h2 { color:#3d4a1e; margin-bottom:20px; }
+.bar-container { margin:10px 0; }
+.bar { height:24px; background:#4CAF50; border-radius:4px; }
+.bar-label { font-weight:600; margin-right:8px; }
+.comment-card { background:#fff; padding:15px; border-radius:8px; margin:10px 0; box-shadow:0 2px 8px rgba(0,0,0,.1); }
+.comment-rating { color:#f4b400; font-size:18px; }
+.filter-btn { padding:6px 12px; border:1px solid #3d4a1e; border-radius:6px; background:#fff; margin-right:8px; cursor:pointer; }
+.filter-btn.active { background:#3d4a1e; color:#fff; }
+.export-btn { padding:8px 16px; background:#3d4a1e; color:#fff; border:none; border-radius:6px; cursor:pointer; float:right;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>สรุปความพึงพอใจ & ความคิดเห็น</h2>
+
+    <!-- คะแนนเฉลี่ย -->
+    <div id="averageRating" style="font-size:28px;font-weight:bold;color:#3d4a1e;"></div>
+
+    <!-- กราฟคะแนนแท่ง -->
+    <div id="bars"></div>
+
+    <!-- ฟิลเตอร์ -->
+    <div style="margin-top:20px;">
+      <span class="filter-btn active" onclick="filterComments('all')">ทั้งหมด</span>
+      <span class="filter-btn" onclick="filterComments(5)">5 ⭐</span>
+      <span class="filter-btn" onclick="filterComments(4)">4 ⭐</span>
+      <span class="filter-btn" onclick="filterComments(3)">3 ⭐</span>
+      <span class="filter-btn" onclick="filterComments(2)">2 ⭐</span>
+      <span class="filter-btn" onclick="filterComments(1)">1 ⭐</span>
+
+      <button class="export-btn" onclick="exportCSV()">ส่งออก CSV</button>
+    </div>
+
+    <!-- รายการความคิดเห็น -->
+    <div id="commentsList"></div>
+
+</div>
+
+<script>
+let surveyData = [
+  { rating: 5, comment:"ระบบใช้ง่ายมากครับ!" },
+  { rating: 4, comment:"ดีมาก แต่หาปุ่มส่งออกยากหน่อย" },
+  { rating: 5, comment:"ชอบ UI มาก จัดเรียงดี" },
+  { rating: 3, comment:"เฉยๆ ควรเพิ่มฟีเจอร์อีกเยอะ" },
+  { rating: 5, comment:"เยี่ยมมาก" }
+];
+
+// สรุปคะแนน
+function summaryRatings(data){
+  let counts = {1:0,2:0,3:0,4:0,5:0};
+  data.forEach(d => counts[d.rating]++);
+  const total = data.length;
+  let sum = 0;
+  for(let i=1;i<=5;i++) sum += i*counts[i];
+  return {counts,avg:(sum/total).toFixed(1),total};
+}
+
+function renderBars(){
+  const {counts,avg} = summaryRatings(surveyData);
+  document.getElementById("averageRating").textContent = "คะแนนเฉลี่ย " + avg + " ⭐";
+
+  const barsDiv = document.getElementById("bars");
+  barsDiv.innerHTML = "";
+
+  for(let i=5;i>=1;i--){
+    const barPerc = counts[i] * 20; /* simple width */
+    barsDiv.innerHTML += `
+      <div class="bar-container">
+        <span class="bar-label">${i} ⭐</span>
+        <div class="bar" style="width:${barPerc}%;"></div>
+        <span> ${counts[i]} ความเห็น</span>
+      </div>
+    `;
+  }
+}
+
+function renderComments(list){
+  const container = document.getElementById("commentsList");
+  container.innerHTML = "";
+  list.forEach(c=>{
+    container.innerHTML += `
+      <div class="comment-card">
+        <div class="comment-rating">${"⭐".repeat(c.rating)}</div>
+        <div>${c.comment}</div>
+      </div>
+    `;
+  });
+}
+
+function filterComments(rating){
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+
+  if(rating==="all"){
+    renderComments(surveyData);
+  } else {
+    renderComments(surveyData.filter(x=>x.rating==rating));
+  }
+}
+
+// การส่งออก CSV
+function exportCSV(){
+  let csv="rating,comment\n";
+  surveyData.forEach(d=> csv+=`${d.rating},"${d.comment}"\n`);
+  const blob = new Blob([csv],{ type:"text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download="survey_results.csv"; a.click();
+}
+
+renderBars();
+renderComments(surveyData);
+</script>
+
+</body>
+</html>
